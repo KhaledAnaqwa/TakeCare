@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "515860270302",
+    "project_id": "takecare-ab5ca",
+    "storage_bucket": "takecare-ab5ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515860270302:android:a1add591b70979ad5a864f",
+        "android_client_info": {
+          "package_name": "com.aqu.takecare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "515860270302-cr26pvvntgda8ntpmfpcfh8kqdhum7sg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Pdf1UqOi96Hz7k-IkAygKm5BIUv3pD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "515860270302-cr26pvvntgda8ntpmfpcfh8kqdhum7sg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
