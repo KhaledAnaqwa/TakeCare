@@ -2,11 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/edit_profile"
-        android:icon="@drawable/ic_person_w_24dp"
-        android:title="Edit Profile"
-        app:showAsAction="ifRoom"></item>
-    <item
         android:id="@+id/sign_out"
         android:title="Sign Out"
         app:showAsAction="never"></item>

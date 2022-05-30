@@ -131,9 +131,10 @@ public class LoginActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                 boolean supervisor = (boolean) task.getResult().get("supervisor");
+                                String name = (String) task.getResult().get("fName");
                                 user = new LoggedInUser(
                                         userID,
-                                        DisplayName, supervisor);
+                                        name, supervisor);
                                 updateUiWithUser(user);
                             }
                         });

@@ -14,12 +14,14 @@
         android:theme="@style/Theme.TakeCare"
         tools:targetApi="31">
         <activity
+            android:name=".ui.medicine.CreateMedicineActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.supervisor.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.patient.EditPatientProfileActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.patient.PatientActivity"
             android:exported="false"
@@ -33,7 +35,6 @@
         <activity
             android:name=".ui.CreateAccount.CreateAccountActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.CreateAccount.CreatePatientAccountActivity"
             android:exported="false" />

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.aqu.takecare.R;
 import com.aqu.takecare.databinding.ActivitySupervisorBinding;
 import com.aqu.takecare.ui.CreateAccount.CreatePatientAccountActivity;
+import com.aqu.takecare.ui.login.LoginActivity;
 import com.aqu.takecare.ui.patient.EditPatientProfileActivity;
 import com.aqu.takecare.ui.patient.PatientActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -122,6 +123,10 @@ public class SupervisorActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.edit_profile:
                 startActivity(new Intent(SupervisorActivity.this, EditProfileActivity.class));
+                return true;
+            case R.id.sign_out:
+                fAuth.signOut();
+                startActivity(new Intent(SupervisorActivity.this, LoginActivity.class));
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

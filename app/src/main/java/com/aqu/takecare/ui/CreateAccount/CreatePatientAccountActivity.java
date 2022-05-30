@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.aqu.takecare.databinding.ActivityCreatePatientAccountBinding;
-import com.aqu.takecare.ui.login.LoginActivity;
 import com.aqu.takecare.ui.supervisor.SupervisorActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -59,7 +58,7 @@ public class CreatePatientAccountActivity extends AppCompatActivity {
         mCity = binding.city;
         mAge = binding.age;
         mCreateAccountActivityBtn = binding.registerBtn;
-        mLoginBtn = binding.createText;
+
 
         fAuth = FirebaseAuth.getInstance();
 
@@ -150,14 +149,5 @@ public class CreatePatientAccountActivity extends AppCompatActivity {
                 });
             }
         });
-
-
-        mLoginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            }
-        });
-
     }
 }

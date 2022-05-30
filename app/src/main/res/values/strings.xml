@@ -13,4 +13,20 @@
     <string name="appname">TakeCareApp</string>
     <string name="title_activity_supervisor">SupervisorActivity</string>
     <string name="title_activity_patient">PatientActivity</string>
+
+    <string-array name="options">
+        <item>One Time</item>
+        <item>One Time Per Day</item>
+        <item>Two Times Per Day</item>
+        <item>Three Times Per Day</item>
+    </string-array>
+
+    <string-array name="period">
+        <item>One time</item>
+        <item>1 week</item>
+        <item>2 weeks </item>
+        <item>3 weeks</item>
+        <item>4 weeks</item>
+        <item>5 weeks</item>
+    </string-array>
 </resources>
