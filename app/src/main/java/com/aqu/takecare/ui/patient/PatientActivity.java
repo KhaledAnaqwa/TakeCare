@@ -2,25 +2,32 @@ package com.aqu.takecare.ui.patient;
 
 import static com.aqu.takecare.ui.supervisor.SupervisorActivity.PatientUID;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.aqu.takecare.R;
 import com.aqu.takecare.data.model.Drug;
 import com.aqu.takecare.databinding.ActivityPatientBinding;
+import com.aqu.takecare.service.BackService;
 import com.aqu.takecare.ui.login.LoginActivity;
 import com.aqu.takecare.ui.medicine.CreateMedicineActivity;
 import com.aqu.takecare.ui.medicine.DrugArrayAdapter;
 import com.aqu.takecare.ui.supervisor.SupervisorActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +36,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class PatientActivity extends AppCompatActivity {
@@ -39,7 +48,7 @@ public class PatientActivity extends AppCompatActivity {
     private String patientUID;
     private FirebaseAuth fAuth;
     private FirebaseFirestore fStore;
-    private ListView listOfdrug;
+    private ListView listOfdrugs;
     private FloatingActionButton fab;
 
 
@@ -50,12 +59,12 @@ public class PatientActivity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         List<Drug> Drugs = new ArrayList<>();
         binding = ActivityPatientBinding.inflate(getLayoutInflater());
-        View header = getLayoutInflater().inflate(R.layout.head_layout, null);
+//        View header = getLayoutInflater().inflate(R.layout.head_layout, null);
 
-        listOfdrug = binding.drugList;
+        listOfdrugs = binding.drugList;
         fab = binding.fab;
 
-        listOfdrug.addHeaderView(header);
+//        listOfdrugs.addHeaderView(header);
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
@@ -66,6 +75,8 @@ public class PatientActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             patientUID = (String) getIntent().getExtras().get(SupervisorActivity.PatientUID);
             fab.setVisibility(View.VISIBLE);
+        } else {
+            startService(new Intent(PatientActivity.this, BackService.class));
         }
 
         Query data = fStore.collection("drugs").whereEqualTo("patient", patientUID);
@@ -79,33 +90,73 @@ public class PatientActivity extends AppCompatActivity {
                 for (int i = 0; i < size; i++) {
                     DocumentSnapshot DrugObject = DrugsData.get(i);
                     Drug drug = DrugObject.toObject(Drug.class);
+                    drug.setId(DrugObject.getId());
                     Drugs.add(drug);
                 }
                 DrugArrayAdapter adapter = new DrugArrayAdapter(getApplicationContext(), Drugs);
 
-                listOfdrug.setAdapter(adapter);
-//
-//
-//                listOfPatient.setLongClickable(true);
-//                listOfPatient.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//                    @Override
-//                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//                        Intent intent = new Intent(SupervisorActivity.this, EditPatientProfileActivity.class);
-//                        intent.putExtra(PatientUID, user_ids.get(position));
-//                        startActivity(intent);
-//                        return true;
-//                    }
-//                });
-//                listOfPatient.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        Intent intent = new Intent(SupervisorActivity.this, PatientActivity.class);
-//                        intent.putExtra(PatientUID, user_ids.get(position));
-//                        startActivity(intent);
-//                    }
-//                });
+                listOfdrugs.setAdapter(adapter);
+                listOfdrugs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //  checking current time is time of dosage then populate popup to confirm taking Dosage
+                        //  else current dosage was taken
+                        Drug currentDrug = Drugs.get(position);
+                        int currentHourOfTheDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//                        int hourPassedAfterStartOfCurrentDosage = currentHourOfTheDay % currentDrug.getDailyDosage();
+                        int hoursForEachDosage = 24 / currentDrug.getDailyDosage();
+//                        int NumberOfDosageShouldBeTakenUntilCurrentTime = currentHourOfTheDay / hoursForEachDosage;
+
+
+                        long hours = 0;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+
+                            hours = ChronoUnit.HOURS.between(cal.toInstant(), Calendar.getInstance().getTime().toInstant());
+                        }
+
+                        int dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
+                        if ((dosage <= currentDrug.getDailyDosage()) && dosage > currentDrug.getActualDailyDosage()) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(PatientActivity.this).create();
+                            alertDialog.setTitle("Dosage Confirmation !");
+                            alertDialog.setMessage("Did you take your current dosage (" + currentDrug.getDosage() + ") of " + currentDrug.getDrugName() + "?");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            //increase of taken daily & total dosages ..
+                                            currentDrug.setActualDailyDosage(currentDrug.getActualDailyDosage() + 1);
+                                            currentDrug.setActualTotalDailyDosageUntilToday(currentDrug.getActualTotalDailyDosageUntilToday() + 1);
+                                            fStore.collection("drugs").document(currentDrug.getId()).set(currentDrug).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+
+                                                    dialog.dismiss();
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d("TAG", "onFailure: " + e.toString());
+                                                }
+                                            });
+
+                                        }
+                                    });
+                            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alertDialog.show();
+
+                        } else {
+
+                        }
+
+                    }
+                });
             }
         });
 

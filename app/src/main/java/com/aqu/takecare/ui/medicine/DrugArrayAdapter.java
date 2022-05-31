@@ -2,6 +2,7 @@ package com.aqu.takecare.ui.medicine;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,14 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
 
         // get the position of the view from the ArrayAdapter
         Drug currentItem = getItem(position);
-        long days = 0;
+        long dosage = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            days = ChronoUnit.DAYS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
+            long hours = ChronoUnit.HOURS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
+            int hoursForEachDosage = 24 / currentItem.getDailyDosage();
+            dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
+            Log.d("TAG", "hours " + hours + "");
+            Log.d("TAG", "hoursForEachDosage " + hoursForEachDosage + "");
+            Log.d("TAG", "dosage " + dosage + "");
         }
         // then according to the position of the view assign the desired image for the same
 
@@ -57,7 +63,7 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
         assert currentItem != null;
         DrugName.setText(currentItem.getDrugName());
         TodayDosage.setText(currentItem.getActualDailyDosage() + "/" + currentItem.getDailyDosage());
-        TotalDosage.setText((currentItem.getActualTotalDailyDosageUntilToday() + "/" + (currentItem.getDailyDosage() * days)));
+        TotalDosage.setText((currentItem.getActualTotalDailyDosageUntilToday() + "/" + dosage));
 
 
         // then return the recyclable view

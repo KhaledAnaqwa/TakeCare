@@ -4,6 +4,8 @@ package com.aqu.takecare.data.model;
 import java.util.Date;
 
 public class Drug {
+
+    private String Id;
     private String DrugName;
     private String Dosage;
     private int DailyDosage = 0;
@@ -16,7 +18,8 @@ public class Drug {
     public Drug() {
     }
 
-    public Drug(String drugName, String dosage, int dailyDosage, int dosagePeriod, Date startDate, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
+    public Drug(String id, String drugName, String dosage, int dailyDosage, int dosagePeriod, Date startDate, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
+        Id = id;
         DrugName = drugName;
         Dosage = dosage;
         DailyDosage = dailyDosage;
@@ -26,6 +29,7 @@ public class Drug {
         ActualTotalDailyDosageUntilToday = actualTotalDailyDosageUntilToday;
         this.patient = patient;
     }
+
 
     public String getDrugName() {
         return DrugName;
@@ -89,5 +93,13 @@ public class Drug {
 
     public void setPatient(String patient) {
         this.patient = patient;
+    }
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
     }
 }
