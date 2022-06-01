@@ -11,6 +11,7 @@ public class Drug {
     private int DailyDosage = 0;
     private int DosagePeriod = 0;
     private Date startDate;
+    private Date last_update;
     private int ActualDailyDosage = 0;
     private int ActualTotalDailyDosageUntilToday = 0;
     private String patient;
@@ -18,13 +19,14 @@ public class Drug {
     public Drug() {
     }
 
-    public Drug(String id, String drugName, String dosage, int dailyDosage, int dosagePeriod, Date startDate, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
+    public Drug(String id, String drugName, String dosage, int dailyDosage, int dosagePeriod, Date startDate, Date last_update, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
         Id = id;
         DrugName = drugName;
         Dosage = dosage;
         DailyDosage = dailyDosage;
         DosagePeriod = dosagePeriod;
         this.startDate = startDate;
+        this.last_update = last_update;
         ActualDailyDosage = actualDailyDosage;
         ActualTotalDailyDosageUntilToday = actualTotalDailyDosageUntilToday;
         this.patient = patient;
@@ -101,5 +103,13 @@ public class Drug {
 
     public void setId(String id) {
         Id = id;
+    }
+
+    public Date getLast_update() {
+        return last_update;
+    }
+
+    public void setLast_update(Date last_update) {
+        this.last_update = last_update;
     }
 }

@@ -1,6 +1,7 @@
 package com.aqu.takecare.ui.medicine;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +45,7 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
 
         // get the position of the view from the ArrayAdapter
         Drug currentItem = getItem(position);
-        long dosage = 0;
+        int dosage = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             long hours = ChronoUnit.HOURS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
             int hoursForEachDosage = 24 / currentItem.getDailyDosage();
@@ -63,13 +64,43 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
         assert currentItem != null;
         DrugName.setText(currentItem.getDrugName());
         TodayDosage.setText(currentItem.getActualDailyDosage() + "/" + currentItem.getDailyDosage());
+        Drawable TodayDosageRes = getRatioColor(currentItem.getActualDailyDosage(), currentItem.getDailyDosage());
+        TodayDosage.setBackground(TodayDosageRes);
         TotalDosage.setText((currentItem.getActualTotalDailyDosageUntilToday() + "/" + dosage));
+        Drawable TotalDosageRes = getRatioColor(currentItem.getActualTotalDailyDosageUntilToday(), dosage);
+        TotalDosage.setBackground(TotalDosageRes);
 
 
         // then return the recyclable view
         return currentItemView;
 
 
+    }
+
+    private Drawable getRatioColor(int firstNum, int secondNum) {
+        String green_circle = "@drawable/green_circle";
+        String orange_circle = "@drawable/orange_circle";
+        String red_circle = "@drawable/red_circle";
+        float half = secondNum / 2;
+        int actualDailyDosage = firstNum;
+
+        String uri = green_circle;
+        Log.d("TAG", "firstNum " + firstNum);
+
+        Log.d("TAG", "secondNum " + secondNum + "");
+        Log.d("TAG", "half " + half + "");
+
+
+        if ((actualDailyDosage == 0) || (actualDailyDosage >= 0 && half > actualDailyDosage)) {
+            uri = red_circle;
+        } else if (half == actualDailyDosage) {
+            uri = orange_circle;
+        }
+
+        int identifierResource = mContext.getResources().getIdentifier(uri, null, mContext.getPackageName());
+
+        Drawable res = mContext.getResources().getDrawable(identifierResource);
+        return res;
     }
 
     @Override

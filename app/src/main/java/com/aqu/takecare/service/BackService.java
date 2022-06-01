@@ -55,10 +55,10 @@ public class BackService extends Service {
                     currentItem.setId(DrugObject.getId());
                     Drugs.add(currentItem);
 
-
+                    Calendar cal = Calendar.getInstance();
                     long hours = 0;
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        Calendar cal = Calendar.getInstance();
+
                         cal.set(Calendar.HOUR_OF_DAY, 0);
 
                         hours = ChronoUnit.HOURS.between(cal.toInstant(), Calendar.getInstance().getTime().toInstant());
@@ -88,11 +88,15 @@ public class BackService extends Service {
                             break;
                     }
                     if ((dosage <= currentItem.getDailyDosage()) && dosage > currentItem.getActualDailyDosage()) {
-
+                        cal.set(Calendar.HOUR_OF_DAY, hoursForEachDosage * (dosage - 1));
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                                 .setSmallIcon(R.drawable.ic_baseline_medical_services_24)
-                                .setContentTitle("Dosage Time")
-                                .setContentText("Please take (" + currentItem.getDosage() + ") of your " + dosageOrderName + " dosage of " + currentItem.getDrugName())
+                                .setContentTitle("Dosage Time"
+//                                        + " before "+cal.getTime().toString()
+                                )
+                                .setContentText("Please take (" + currentItem.getDosage() + ") of your " + dosageOrderName + " dosage of " + currentItem.getDrugName()
+//                                        +" between "+cal.getTime().toString()
+                                )
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                 // Set the intent that will fire when the user taps the notification
                                 .setContentIntent(pendingIntent)
