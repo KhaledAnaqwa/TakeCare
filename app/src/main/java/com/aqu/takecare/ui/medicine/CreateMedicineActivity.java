@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.aqu.takecare.databinding.ActivityCreateMedicineBinding;
-import com.aqu.takecare.ui.patient.PatientActivity;
+import com.aqu.takecare.ui.supervisor.SupervisorActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -87,7 +87,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
                 Drug.put("DailyDosage", DosageDaily);
                 Drug.put("DosagePeriod", DosagePeriod);
                 Drug.put("startDate", Calendar.getInstance().getTime());
-
+                Drug.put("last_update", Calendar.getInstance().getTime());
                 Drug.put("ActualDailyDosage", 0);
                 Drug.put("ActualTotalDailyDosageUntilToday", 0);
 
@@ -97,7 +97,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "onSuccess: Drug  is created for ");
-                        Intent intent = new Intent(CreateMedicineActivity.this, PatientActivity.class);
+                        Intent intent = new Intent(CreateMedicineActivity.this, SupervisorActivity.class);
                         intent.putExtra(PatientUID, patientUID);
                         startActivity(intent);
                     }

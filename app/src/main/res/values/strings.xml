@@ -10,9 +10,9 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="create">Create Account</string>
-    <string name="appname">TakeCareApp</string>
-    <string name="title_activity_supervisor">SupervisorActivity</string>
-    <string name="title_activity_patient">PatientActivity</string>
+    <string name="appname">Take Care App</string>
+    <string name="title_activity_supervisor">Supervisor Activity</string>
+    <string name="title_activity_patient">Patient Activity</string>
 
     <string-array name="options">
         <item>One Time</item>
