@@ -65,8 +65,13 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
+//        getIntent().getBooleanExtra()
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().get("FromService") != null) {
+                if (mAuth.getCurrentUser() != null)
+                    startActivity(new Intent(LoginActivity.this, PatientActivity.class));
+            }
+        }
         usernameEditText = binding.username;
         passwordEditText = binding.password;
         loginButton = binding.login;

@@ -2,7 +2,6 @@ package com.aqu.takecare.ui.medicine;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import androidx.annotation.Nullable;
 import com.aqu.takecare.R;
 import com.aqu.takecare.data.model.Drug;
 
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.List;
 
 public class DrugArrayAdapter extends ArrayAdapter<Drug> {
@@ -45,15 +42,19 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
 
         // get the position of the view from the ArrayAdapter
         Drug currentItem = getItem(position);
+
+        int NewDosage = 0;
+        NewDosage = currentItem.getDailyDosage() * currentItem.getDosagePeriod();
         int dosage = 0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            long hours = ChronoUnit.HOURS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
-            int hoursForEachDosage = 24 / currentItem.getDailyDosage();
-            dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
-            Log.d("TAG", "hours " + hours + "");
-            Log.d("TAG", "hoursForEachDosage " + hoursForEachDosage + "");
-            Log.d("TAG", "dosage " + dosage + "");
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            long hours = ChronoUnit.HOURS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
+//            int hoursForEachDosage = 24 / currentItem.getDailyDosage();
+//            dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
+//            Log.d("TAG", "hours " + hours + "");
+//            Log.d("TAG", "hoursForEachDosage " + hoursForEachDosage + "");
+//            Log.d("TAG", "dosage " + dosage + "");
+//        }
+
         // then according to the position of the view assign the desired image for the same
 
         TextView DrugName = currentItemView.findViewById(R.id.DrugName);
@@ -66,8 +67,10 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
         TodayDosage.setText(currentItem.getActualDailyDosage() + "/" + currentItem.getDailyDosage());
         Drawable TodayDosageRes = getRatioColor(currentItem.getActualDailyDosage(), currentItem.getDailyDosage());
         TodayDosage.setBackground(TodayDosageRes);
-        TotalDosage.setText((currentItem.getActualTotalDailyDosageUntilToday() + "/" + dosage));
-        Drawable TotalDosageRes = getRatioColor(currentItem.getActualTotalDailyDosageUntilToday(), dosage);
+
+
+        TotalDosage.setText((currentItem.getActualTotalDailyDosageUntilToday() + "/" + NewDosage));
+        Drawable TotalDosageRes = getRatioColor(currentItem.getActualTotalDailyDosageUntilToday(), NewDosage);
         TotalDosage.setBackground(TotalDosageRes);
 
 

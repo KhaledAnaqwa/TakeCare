@@ -38,7 +38,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -121,22 +120,26 @@ public class PatientActivity extends AppCompatActivity {
                             //  checking current time is time of dosage then populate popup to confirm taking Dosage
                             //  else current dosage was taken
                             Drug currentDrug = Drugs.get(position);
-                            int currentHourOfTheDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+//                            int currentHourOfTheDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 //                        int hourPassedAfterStartOfCurrentDosage = currentHourOfTheDay % currentDrug.getDailyDosage();
-                            int hoursForEachDosage = 24 / currentDrug.getDailyDosage();
+//                            int hoursForEachDosage = 24 / currentDrug.getDailyDosage();
 //                        int NumberOfDosageShouldBeTakenUntilCurrentTime = currentHourOfTheDay / hoursForEachDosage;
 
 
-                            long hours = 0;
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                Calendar cal = Calendar.getInstance();
-                                cal.set(Calendar.HOUR_OF_DAY, 0);
+//                            long hours = 0;
+//                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//                                Calendar cal = Calendar.getInstance();
+//                                cal.set(Calendar.HOUR_OF_DAY, 0);
+//
+//                                hours = ChronoUnit.HOURS.between(cal.toInstant(), Calendar.getInstance().getTime().toInstant());
+//                            }
+//
+//                            int dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
+//                            if ((dosage <= currentDrug.getDailyDosage()) && dosage > currentDrug.getActualDailyDosage()) {
 
-                                hours = ChronoUnit.HOURS.between(cal.toInstant(), Calendar.getInstance().getTime().toInstant());
-                            }
 
-                            int dosage = (int) Math.ceil((float) hours / hoursForEachDosage);
-                            if ((dosage <= currentDrug.getDailyDosage()) && dosage > currentDrug.getActualDailyDosage()) {
+                            if (currentDrug.getActualTotalDailyDosageUntilToday() < (currentDrug.getDailyDosage() * currentDrug.getDosagePeriod())) {
                                 AlertDialog alertDialog = new AlertDialog.Builder(PatientActivity.this).create();
                                 alertDialog.setTitle("Dosage Confirmation !");
                                 alertDialog.setMessage("Did you take your current dosage (" + currentDrug.getDosage() + ") of " + currentDrug.getDrugName() + "?");

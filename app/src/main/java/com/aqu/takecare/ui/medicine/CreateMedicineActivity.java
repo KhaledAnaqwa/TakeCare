@@ -114,7 +114,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
     }
 
     int getPeriodValue(String period) {
-        int value = 0;
+        int value = 1;
         switch (period) {
             case "One Time":
                 value = 1;
@@ -122,16 +122,16 @@ public class CreateMedicineActivity extends AppCompatActivity {
             case "1 week":
                 value = 7;
                 break;
-            case "2 week":
+            case "2 weeks":
                 value = 14;
                 break;
-            case "3 week":
+            case "3 weeks":
                 value = 21;
                 break;
-            case "4 week":
+            case "4 weeks":
                 value = 27;
                 break;
-            case "5 week":
+            case "5 weeks":
                 value = 34;
                 break;
         }
@@ -140,7 +140,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
     }
 
     int getDailyDosageValue(String period) {
-        int value = 0;
+        int value = 1;
         switch (period) {
             case "One Time":
                 value = 1;

@@ -72,9 +72,10 @@ public class BackService extends Service {
                     Log.d("BackService TAG", "dosage " + dosage + "");
 
 
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+                    Intent intent = new Intent(BackService.this, LoginActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.putExtra("FromService", "true");
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                     String dosageOrderName = "";
                     switch (dosage) {
                         case 1:

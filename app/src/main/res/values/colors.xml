@@ -22,4 +22,17 @@
     <color name="middle_grey">#92908a</color>
     <color name="field_drab">#6d5218</color>
 
+
+    <color name="rich_black">#010007</color>
+    <color name="white2">#fbfcfd</color>
+    <color name="black2">#030000</color>
+    <color name="space_cadet">#2d344a</color>
+    <color name="cultured">#edf0f1</color>
+    <color name="periwinkle_crayola">#6180E1</color>
+    <color name="blue_crayola">#577ae8</color>
+    <color name="liberty">#43579d</color>
+
+
+    <color name="cool_grey">#8f9ebe</color>
+
 </resources>
