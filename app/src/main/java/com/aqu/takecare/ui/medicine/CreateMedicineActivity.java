@@ -56,7 +56,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String DrugName = mDrugName.getText().toString().trim();
-                String Dosage = mDosage.getText().toString().trim();
+                final int Dosage = Integer.parseInt(mDosage.getText().toString().trim());
                 final String DailyDosage = mDailyDosage.getSelectedItem().toString();
                 final String Period = mPeriod.getSelectedItem().toString();
 
@@ -66,7 +66,7 @@ public class CreateMedicineActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (TextUtils.isEmpty(Dosage)) {
+                if (TextUtils.isEmpty(String.valueOf(Dosage))) {
                     mDosage.setError("Dosage is Required.");
                     return;
                 }

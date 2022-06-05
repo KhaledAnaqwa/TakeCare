@@ -80,6 +80,7 @@ public class PatientActivity extends AppCompatActivity {
         } else {
             startService(new Intent(PatientActivity.this, BackService.class));
             isPatient = true;
+            binding.DeleteTextView.setVisibility(View.GONE);
         }
 
         Query data = fStore.collection("drugs").whereEqualTo("patient", patientUID);
@@ -110,7 +111,7 @@ public class PatientActivity extends AppCompatActivity {
                     }
                     Drugs.add(drug);
                 }
-                DrugArrayAdapter adapter = new DrugArrayAdapter(getApplicationContext(), Drugs);
+                DrugArrayAdapter adapter = new DrugArrayAdapter(getApplicationContext(), Drugs, !isPatient);
 
                 listOfdrugs.setAdapter(adapter);
                 if (isPatient)
@@ -139,7 +140,7 @@ public class PatientActivity extends AppCompatActivity {
 //                            if ((dosage <= currentDrug.getDailyDosage()) && dosage > currentDrug.getActualDailyDosage()) {
 
 
-                            if (currentDrug.getActualTotalDailyDosageUntilToday() < (currentDrug.getDailyDosage() * currentDrug.getDosagePeriod())) {
+                            if (currentDrug.getActualTotalDailyDosageUntilToday() < (currentDrug.getDosage())) {
                                 AlertDialog alertDialog = new AlertDialog.Builder(PatientActivity.this).create();
                                 alertDialog.setTitle("Dosage Confirmation !");
                                 alertDialog.setMessage("Did you take your current dosage (" + currentDrug.getDosage() + ") of " + currentDrug.getDrugName() + "?");
@@ -177,6 +178,38 @@ public class PatientActivity extends AppCompatActivity {
                             } else {
 
                             }
+
+                        }
+                    });
+                else
+                    listOfdrugs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Drug currentDrug = Drugs.get(position);
+                            AlertDialog alertDialog = new AlertDialog.Builder(PatientActivity.this).create();
+                            alertDialog.setTitle("Drug Delete Confirmation !");
+                            alertDialog.setMessage("Are you sure you want to Delete (" + currentDrug.getDrugName() + ") ? ");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Yes",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Drugs.remove(position);
+                                            adapter.notifyDataSetChanged();
+                                            fStore.collection("drugs").document(currentDrug.getId()).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    Toast.makeText(getApplicationContext(), "Drug " + currentDrug.getDrugName() + " was deleted ..", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+
+                                        }
+                                    });
+                            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            alertDialog.show();
 
                         }
                     });

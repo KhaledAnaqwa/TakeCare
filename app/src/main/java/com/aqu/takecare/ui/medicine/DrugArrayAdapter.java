@@ -21,11 +21,13 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
 
     private final Context mContext;
     private List<Drug> mObjects;
+    private boolean isSupervisor;
 
-    public DrugArrayAdapter(@NonNull Context context, @NonNull List<Drug> objects) {
+    public DrugArrayAdapter(@NonNull Context context, @NonNull List<Drug> objects, boolean isSupervisor) {
         super(context, R.layout.drug_layout, objects);
         this.mContext = context;
         this.mObjects = objects;
+        this.isSupervisor = isSupervisor;
     }
 
     @NonNull
@@ -43,8 +45,8 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
         // get the position of the view from the ArrayAdapter
         Drug currentItem = getItem(position);
 
-        int NewDosage = 0;
-        NewDosage = currentItem.getDailyDosage() * currentItem.getDosagePeriod();
+        int NewDosage = currentItem.getDosage();
+//        NewDosage = currentItem.getDailyDosage() * currentItem.getDosagePeriod();
         int dosage = 0;
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            long hours = ChronoUnit.HOURS.between(currentItem.getStartDate().toInstant(), Calendar.getInstance().getTime().toInstant());
@@ -56,11 +58,15 @@ public class DrugArrayAdapter extends ArrayAdapter<Drug> {
 //        }
 
         // then according to the position of the view assign the desired image for the same
-
+        Log.d("TAG", "currentItem.getDailyDosage() : currentItem.getDosagePeriod() " + currentItem.getDailyDosage() + " : " + currentItem.getDosagePeriod());
+        Log.d("TAG", "NewDosage " + NewDosage + "");
         TextView DrugName = currentItemView.findViewById(R.id.DrugName);
         TextView TodayDosage = currentItemView.findViewById(R.id.TodayDosage);
         TextView TotalDosage = currentItemView.findViewById(R.id.TotalDosage);
-
+        if (!isSupervisor) {
+            View delete = currentItemView.findViewById(R.id.delete);
+            delete.setVisibility(View.GONE);
+        }
 
         assert currentItem != null;
         DrugName.setText(currentItem.getDrugName());

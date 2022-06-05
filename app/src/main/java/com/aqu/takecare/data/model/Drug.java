@@ -7,7 +7,7 @@ public class Drug {
 
     private String Id;
     private String DrugName;
-    private String Dosage;
+    private int Dosage;
     private int DailyDosage = 0;
     private int DosagePeriod = 0;
     private Date startDate;
@@ -19,7 +19,7 @@ public class Drug {
     public Drug() {
     }
 
-    public Drug(String id, String drugName, String dosage, int dailyDosage, int dosagePeriod, Date startDate, Date last_update, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
+    public Drug(String id, String drugName, int dosage, int dailyDosage, int dosagePeriod, Date startDate, Date last_update, int actualDailyDosage, int actualTotalDailyDosageUntilToday, String patient) {
         Id = id;
         DrugName = drugName;
         Dosage = dosage;
@@ -41,11 +41,11 @@ public class Drug {
         DrugName = drugName;
     }
 
-    public String getDosage() {
+    public int getDosage() {
         return Dosage;
     }
 
-    public void setDosage(String dosage) {
+    public void setDosage(int dosage) {
         Dosage = dosage;
     }
 

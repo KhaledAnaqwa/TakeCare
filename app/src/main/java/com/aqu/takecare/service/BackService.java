@@ -95,7 +95,12 @@ public class BackService extends Service {
                                 .setContentTitle("Dosage Time"
 //                                        + " before "+cal.getTime().toString()
                                 )
-                                .setContentText("Please take (" + currentItem.getDosage() + ") of your " + dosageOrderName + " dosage of " + currentItem.getDrugName()
+                                .setContentText("Please take " +
+//                                                "(" + currentItem.getDosage() + ")" +
+//                                                " of" +
+                                                "your " +
+//                                                + dosageOrderName +
+                                                "dosage of " + currentItem.getDrugName()
 //                                        +" between "+cal.getTime().toString()
                                 )
                                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
